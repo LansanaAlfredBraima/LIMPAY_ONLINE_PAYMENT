@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed - LIMPAY</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY University</div>
+        </div>
+    </header>
+
+    <main class="container mt-3 mb-3">
+        <div style="max-width: 500px; margin: 50px auto; text-align: center;">
+            <div class="card">
+                <div
+                    style="width: 80px; height: 80px; background-color: #f8d7da; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#721c24" class="bi bi-x-lg"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                    </svg>
+                </div>
+
+                <h2 style="color: #721c24;">Payment Failed</h2>
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">We could not process your
+                    transaction. Please try again.</p>
+
+                <button onclick="history.back()" class="btn btn-primary btn-block">Try Again</button>
+                <a href="dashboard.html" class="btn btn-secondary btn-block mt-1">Cancel</a>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - LIMPAY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY University</div>
+            <nav>
+                <a href="index.html" style="color: var(--surface-color);">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="auth-container card">
+            <div class="text-center mb-2">
+                <h2>Create Account</h2>
+                <p style="color: var(--text-secondary);">Register for the student portal</p>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" id="fullName" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentId" class="form-label">Student ID</label>
+                    <input type="text" id="studentId" class="form-control" placeholder="e.g. 2025001" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="faculty" class="form-label">Faculty</label>
+                    <select id="faculty" class="form-control" required>
+                        <option value="">Select Faculty...</option>
+                        <option value="Science">Faculty of Science</option>
+                        <option value="Arts">Faculty of Arts</option>
+                        <option value="Engineering">Faculty of Engineering</option>
+                        <option value="Business">School of Business</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+
+                <div id="errorMessage" style="color: var(--accent-color); margin-bottom: 10px; display: none;"></div>
+
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+
+                <div class="text-center mt-2">
+                    <p>Already have an account? <a href="login.html"
+                            style="color: var(--primary-color); font-weight: 600;">Login Here</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        async function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const id = document.getElementById('studentId').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const errorMsg = document.getElementById('errorMessage');
+            const btn = e.target.querySelector('button');
+
+            btn.disabled = true;
+            btn.textContent = 'Creating Account...';
+            errorMsg.style.display = 'none';
+
+            try {
+                const result = await limpay.register({
+                    name,
+                    id,
+                    email,
+                    password
+                });
+
+                if (result.success) {
+                    alert('Registration successful! Please login.');
+                    window.location.href = 'login.html';
+                } else {
+                    errorMsg.textContent = result.message || 'Registration failed';
+                    errorMsg.style.display = 'block';
+                    btn.disabled = false;
+                    btn.textContent = 'Register';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Registration failed. Please try again.';
+                errorMsg.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Register';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - LIMPAY University</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .payment-container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .payment-form {
+            background-color: var(--surface-color);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        .summary-box {
+            background-color: var(--background-color);
+            padding: 15px;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 20px;
+        }
+
+        #payment-element {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY</div>
+            <div>
+                <span id="userName" style="margin-right: 15px;">Student</span>
+                <a href="dashboard.html" style="color: var(--surface-color);">Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="payment-container">
+            <h2 class="text-center mb-2">Complete Payment</h2>
+
+            <div class="summary-box">
+                <h3 style="margin-bottom: 10px;">Payment Summary</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Fee Type:</span>
+                    <strong id="feeType">-</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Amount:</span>
+                    <strong id="amount" style="color: var(--primary-color); font-size: 1.2rem;">Le0.00</strong>
+                </div>
+            </div>
+
+            <div class="payment-form">
+                <h3 class="mb-2">Card Details</h3>
+
+                <form id="paymentForm">
+                    <!-- Stripe Elements Placeholder -->
+                    <div id="payment-element"></div>
+
+                    <div id="errorMessage" style="color: var(--accent-color); margin-top: 10px; display: none;"></div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-block" style="margin-top: 20px;">
+                        Pay <span id="payAmount">Le0.00</span>
+                    </button>
+                </form>
+
+                <p class="text-center mt-2" style="color: var(--text-secondary); font-size: 0.9rem;">
+                    🔒 Your payment is secure and encrypted by Stripe
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize Stripe with your Publishable Key
+        const stripe = Stripe('pk_test_51SY05842tqRnUBwzwnBCS1xlHOXrCgnDQ3zTbf28rH8VMzbHM2Otyz6j1PjswljEDYKc17Pl70ehBqeh3ljvAO7000L7jervig');
+
+        const user = limpay.requireAuth();
+        document.getElementById('userName').textContent = user.name;
+
+        // Get payment details from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const feeType = urlParams.get('type');
+        const amount = parseFloat(urlParams.get('amount'));
+        const feeId = urlParams.get('feeId');
+
+        if (!feeType || !amount || !feeId) {
+            alert('Invalid payment details');
+            window.location.href = 'dashboard.html';
+        }
+
+        document.getElementById('feeType').textContent = feeType;
+        document.getElementById('amount').textContent = 'Le' + amount.toFixed(2);
+        document.getElementById('payAmount').textContent = 'Le' + amount.toFixed(2);
+
+        let elements;
+
+        async function initialize() {
+            // Create PaymentIntent on the server
+            const result = await limpay.createPaymentIntent(amount);
+
+            if (!result.success) {
+                document.getElementById('errorMessage').textContent = 'Failed to initialize payment: ' + result.message;
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            const clientSecret = result.clientSecret;
+
+            const appearance = {
+                theme: 'stripe',
+            };
+            elements = stripe.elements({ appearance, clientSecret });
+
+            const paymentElement = elements.create("payment");
+            paymentElement.mount("#payment-element");
+        }
+
+        initialize();
+
+        document.getElementById("paymentForm").addEventListener("submit", handleSubmit);
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            setLoading(true);
+
+            const { error, paymentIntent } = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    // Return URL where the customer should be redirected after the payment
+                    // We handle this manually for this SPA-like flow, or use redirect: 'if_required'
+                },
+                redirect: 'if_required'
+            });
+
+            if (error) {
+                showMessage(error.message);
+                setLoading(false);
+            } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+                // Payment succeeded, now record it in our database
+                try {
+                    const recordResult = await limpay.addTransaction({
+                        feeId: feeId,
+                        amount: amount,
+                        description: feeType,
+                        paymentIntentId: paymentIntent.id
+                    });
+
+                    if (recordResult.success) {
+                        const txnId = recordResult.transaction.id;
+                        const date = new Date().toLocaleDateString();
+                        window.location.href = `payment-success.html?id=${txnId}&amount=${amount}&date=${encodeURIComponent(date)}`;
+                    } else {
+                        showMessage('Payment succeeded but failed to record: ' + recordResult.message);
+                    }
+                } catch (err) {
+                    showMessage('System error recording payment.');
+                    console.error(err);
+                }
+                setLoading(false);
+            } else {
+                showMessage("Unexpected state.");
+                setLoading(false);
+            }
+        }
+
+        function showMessage(messageText) {
+            const messageContainer = document.querySelector("#errorMessage");
+            messageContainer.style.display = "block";
+            messageContainer.textContent = messageText;
+            setTimeout(function () {
+                messageContainer.style.display = "none";
+                messageContainer.textContent = "";
+            }, 4000);
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                document.querySelector("#submitBtn").disabled = true;
+                document.querySelector("#submitBtn").textContent = "Processing...";
+            } else {
+                document.querySelector("#submitBtn").disabled = false;
+                document.querySelector("#submitBtn").textContent = 'Pay Le' + amount.toFixed(2);
+            }
+        }
+    </script>
+</body>
+
+</html>

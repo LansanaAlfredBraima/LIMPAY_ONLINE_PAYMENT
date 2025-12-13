@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Payment Portal - Checkout</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY</div>
+            <nav>
+                <a href="index.html" style="color: var(--surface-color); font-weight: 500;">&larr; Back to
+                    Selection</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mt-3 mb-3">
+        <!-- Progress Tracker -->
+        <div
+            style="display: flex; justify-content: space-between; max-width: 600px; margin: 0 auto 30px; position: relative;">
+            <div
+                style="position: absolute; top: 15px; left: 0; width: 100%; height: 2px; background-color: var(--border-color); z-index: 0;">
+            </div>
+            <div style="position: relative; z-index: 1; text-align: center;">
+                <div
+                    style="width: 30px; height: 30px; background-color: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                    1</div>
+                <span style="font-size: 0.8rem; font-weight: 600;">Selection</span>
+            </div>
+            <div style="position: relative; z-index: 1; text-align: center;">
+                <div
+                    style="width: 30px; height: 30px; background-color: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                    2</div>
+                <span style="font-size: 0.8rem; font-weight: 600;">Review</span>
+            </div>
+            <div style="position: relative; z-index: 1; text-align: center;">
+                <div
+                    style="width: 30px; height: 30px; background-color: var(--border-color); color: var(--text-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                    3</div>
+                <span style="font-size: 0.8rem;">Payment</span>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h1>Payment Summary</h1>
+            <p style="color: var(--text-secondary);">Please review your payment details before proceeding.
+            </p>
+        </div>
+
+        <div style="max-width: 600px; margin: var(--spacing-xl) auto;">
+            <div class="card">
+                <h3
+                    style="border-bottom: 1px solid var(--border-color); padding-bottom: var(--spacing-sm); margin-bottom: var(--spacing-md);">
+                    Fee Details</h3>
+
+                <div class="form-group">
+                    <label for="fee-type" class="form-label">Select Fee Type</label>
+                    <select id="fee-type" class="form-control" onchange="updateAmount()">
+                        <option value="">Loading fees...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount" class="form-label">Amount to Pay (Le)</label>
+                    <input type="number" id="amount" class="form-control" placeholder="0.00">
+                </div>
+
+                <div
+                    style="background-color: #f8f9fa; padding: var(--spacing-md); border-radius: var(--border-radius-sm); margin-top: var(--spacing-md);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Subtotal</span>
+                        <span>Le0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span>Processing Fee</span>
+                        <span>Le0.00</span>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                        <span>Total</span>
+                        <span>Le0.00</span>
+                    </div>
+                </div>
+
+                <button onclick="proceedToPayment()" class="btn btn-primary btn-block mt-2">Proceed to
+                    Payment</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center mt-3"
+        style="padding: 20px; color: var(--text-secondary); font-size: 0.9rem; border-top: 1px solid var(--border-color);">
+        &copy; 2025 LIMPAY University. All rights reserved.
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        (async () => {
+            const user = limpay.requireAuth();
+
+            if (user) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const feeId = urlParams.get('feeId');
+
+                // Load all outstanding fees for the dropdown
+                try {
+                    const fees = await limpay.getOutstandingFees(user.id);
+                    const select = document.getElementById('fee-type');
+
+                    // Clear existing options
+                    select.innerHTML = '<option value="">Select a fee...</option>';
+
+                    fees.forEach(fee => {
+                        const option = document.createElement('option');
+                        option.value = fee.id;
+                        option.text = `${fee.type} (Bal: Le${fee.balance.toFixed(2)})`;
+                        option.dataset.amount = fee.balance;
+                        option.dataset.type = fee.type;
+                        select.appendChild(option);
+                    });
+
+                    // If feeId was passed, select it
+                    if (feeId) {
+                        select.value = feeId;
+                        updateAmount(); // Trigger amount update
+                    }
+
+                } catch (err) {
+                    console.error('Error loading fees:', err);
+                    document.getElementById('fee-type').innerHTML = '<option>Error loading fees</option>';
+                }
+            }
+        })();
+
+        function updateAmount() {
+            const select = document.getElementById('fee-type');
+            const amountInput = document.getElementById('amount');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption.value) {
+                amountInput.value = selectedOption.dataset.amount;
+            } else {
+                amountInput.value = '';
+            }
+        }
+
+        function proceedToPayment() {
+            const select = document.getElementById('fee-type');
+            const amount = document.getElementById('amount').value;
+
+            if (!select.value || !amount) {
+                alert('Please select a fee and verify amount');
+                return;
+            }
+
+            const selectedOption = select.options[select.selectedIndex];
+            const type = selectedOption.dataset.type;
+            const feeId = select.value;
+
+            window.location.href = `payment.html?type=${encodeURIComponent(type)}&amount=${amount}&feeId=${feeId}`;
+        }
+    </script>
+</body>
+
+</html>

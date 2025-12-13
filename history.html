@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - LIMPAY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .sidebar {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 5px;
+            text-decoration: none;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--surface-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY University</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span id="userName" style="color: var(--surface-color);">Student</span>
+                <button onclick="limpay.logout()" class="btn btn-secondary"
+                    style="padding: 5px; font-size: 0.9rem;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-3 mb-3">
+        <div class="dashboard-grid">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="text-center mb-2">
+                    <div
+                        style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
+                        🎓
+                    </div>
+                    <h4 id="profileName" style="margin-bottom: 5px;">Student Name</h4>
+                    <p id="profileId" style="color: var(--text-secondary); font-size: 0.9rem;">ID: 2024000</p>
+                </div>
+                <nav class="sidebar-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="index.html">Make Payment</a>
+                    <a href="history.html" class="active">Transaction History</a>
+                    <a href="profile.html">My Profile</a>
+                    <a href="#">Support</a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h2 class="mb-2">Transaction History</h2>
+
+                <div id="historyList">
+                    <!-- Transaction cards will be injected here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        (async () => {
+            const user = limpay.requireAuth();
+
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profileId').textContent = 'ID: ' + user.id;
+
+                try {
+                    const transactions = await limpay.getTransactions(user.id);
+                    const historyList = document.getElementById('historyList');
+
+                    if (transactions.length === 0) {
+                        historyList.innerHTML = '<div class="card text-center"><p>No transactions found.</p></div>';
+                    } else {
+                        // Sort by date desc
+                        transactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                        transactions.forEach(txn => {
+                            const txnCard = document.createElement('div');
+                            txnCard.className = 'card mb-2';
+                            txnCard.style.display = 'flex';
+                            txnCard.style.justifyContent = 'space-between';
+                            txnCard.style.alignItems = 'center';
+
+                            const date = new Date(txn.created_at).toLocaleDateString();
+                            const statusColor = txn.status === 'Success' ? 'green' : 'red';
+
+                            txnCard.innerHTML = `
+                                <div>
+                                    <h4 style="margin-bottom: 5px;">${txn.description || 'Payment'}</h4>
+                                    <p style="color: var(--text-secondary); font-size: 0.9rem;">${date} • ID: ${txn.id}</p>
+                                </div>
+                                <div class="text-center">
+                                    <div style="font-weight: bold; font-size: 1.1rem; color: var(--accent-color);">Le${txn.amount.toFixed(2)}</div>
+                                    <div style="color: ${statusColor}; font-size: 0.8rem;">${txn.status}</div>
+                                    <a href="receipt.html?id=${txn.id}" style="font-size: 0.8rem; text-decoration: underline;">View Receipt</a>
+                                </div>
+                            `;
+                            historyList.appendChild(txnCard);
+                        });
+                    }
+                } catch (err) {
+                    console.error('Error loading history:', err);
+                    document.getElementById('historyList').innerHTML = '<p class="text-danger">Error loading history.</p>';
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>

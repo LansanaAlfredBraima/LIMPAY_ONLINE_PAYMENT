@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Receipt - LIMPAY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            padding: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .receipt-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .receipt-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .receipt-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .receipt-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .info-group h4 {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-group p {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .receipt-table th {
+            text-align: left;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .receipt-table td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .total-section {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .total-label {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-right: 15px;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .paid-stamp {
+            position: absolute;
+            top: 150px;
+            right: 100px;
+            border: 5px solid #28a745;
+            color: #28a745;
+            font-size: 3rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            transform: rotate(-15deg);
+            opacity: 0.8;
+            border-radius: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+            padding-top: 20px;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .receipt-container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="receipt-container">
+        <div class="paid-stamp">PAID</div>
+
+        <div class="receipt-header">
+            <div class="receipt-logo">LIMPAY University</div>
+            <div class="receipt-title">Official Receipt</div>
+        </div>
+
+        <div class="receipt-info">
+            <div class="info-group">
+                <h4>Receipt Number</h4>
+                <p id="receiptNo">Loading...</p>
+            </div>
+            <div class="info-group" style="text-align: right;">
+                <h4>Date Issued</h4>
+                <p id="receiptDate">Loading...</p>
+            </div>
+        </div>
+
+        <div class="receipt-info">
+            <div class="info-group">
+                <h4>Student Details</h4>
+                <p id="studentName">Loading...</p>
+                <p id="studentId" style="font-weight: normal; font-size: 0.9rem;">ID: Loading...</p>
+            </div>
+            <div class="info-group" style="text-align: right;">
+                <h4>Payment Method</h4>
+                <p>Online Payment</p>
+                <p id="cardInfo" style="font-weight: normal; font-size: 0.9rem;">Card ending in ****</p>
+            </div>
+        </div>
+
+        <table class="receipt-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Session</th>
+                    <th style="text-align: right;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="paymentDesc">Loading...</td>
+                    <td>2024/2025</td>
+                    <td id="paymentAmount" style="text-align: right;">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <span class="total-label">Total Paid:</span>
+            <span class="total-amount" id="totalAmount">Loading...</span>
+        </div>
+
+        <div class="footer">
+            <p>This is a computer-generated receipt and requires no signature.</p>
+            <p>LIMPAY University | 123 University Ave, Tech City | support@limpay.edu</p>
+        </div>
+
+        <div class="text-center mt-3 no-print" style="text-align: center; margin-top: 30px;">
+            <button onclick="window.print()" class="btn btn-primary" style="padding: 10px 20px;">Print Receipt</button>
+            <button onclick="window.close()" class="btn btn-secondary"
+                style="padding: 10px 20px; margin-left: 10px;">Close</button>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        (async () => {
+            const user = limpay.requireAuth();
+            const urlParams = new URLSearchParams(window.location.search);
+            const txnId = urlParams.get('id');
+
+            if (!txnId) {
+                alert('Invalid Receipt ID');
+                window.close();
+                return;
+            }
+
+            try {
+                const txn = await limpay.getTransaction(txnId);
+
+                if (txn) {
+                    document.getElementById('receiptNo').textContent = txn.id;
+                    document.getElementById('receiptDate').textContent = new Date(txn.created_at || txn.date).toLocaleDateString();
+                    document.getElementById('studentName').textContent = user.name;
+                    document.getElementById('studentId').textContent = 'ID: ' + user.id;
+                    document.getElementById('paymentDesc').textContent = txn.description || 'Tuition Fee';
+
+                    // Show card last 4 digits if available
+                    if (txn.card_last4) {
+                        document.getElementById('cardInfo').textContent = 'Card ending in ' + txn.card_last4;
+                    }
+
+                    const formattedAmount = 'Le' + parseFloat(txn.amount).toFixed(2);
+                    document.getElementById('paymentAmount').textContent = formattedAmount;
+                    document.getElementById('totalAmount').textContent = formattedAmount;
+                } else {
+                    alert('Transaction not found');
+                }
+            } catch (err) {
+                console.error('Error loading receipt:', err);
+                alert('Error loading receipt');
+            }
+        })();
+    </script>
+</body>
+
+</html>

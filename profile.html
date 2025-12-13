@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - LIMPAY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .sidebar {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .profile-card {
+            background-color: var(--surface-color);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-group input:read-only {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: var(--spacing-md);
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY University</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span id="userName" style="color: var(--surface-color);">Student</span>
+                <button onclick="limpay.logout()" class="btn btn-secondary"
+                    style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-3 mb-3">
+        <div class="dashboard-grid">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="text-center mb-2">
+                    <div
+                        style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
+                        🎓
+                    </div>
+                    <h4 id="profileName" style="margin-bottom: 5px;">Student Name</h4>
+                    <p id="profileId" style="color: var(--text-secondary); font-size: 0.9rem;">ID: 2024000</p>
+                </div>
+                <nav class="sidebar-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="index.html">Make Payment</a>
+                    <a href="history.html">Transaction History</a>
+                    <a href="profile.html" class="active">My Profile</a>
+                    <a href="#">Support</a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h2 class="mb-2">My Profile</h2>
+
+                <div id="alertBox" class="alert"></div>
+
+                <div class="profile-card">
+                    <form id="profileForm" onsubmit="handleProfileUpdate(event)">
+                        <div class="form-group">
+                            <label for="studentId">Student ID</label>
+                            <input type="text" id="studentId" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="faculty">Faculty/Department</label>
+                            <input type="text" id="faculty" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sessionStatus">Session Status</label>
+                            <input type="text" id="sessionStatus" value="Active" readonly>
+                        </div>
+
+                        <hr
+                            style="margin: var(--spacing-lg) 0; border: none; border-top: 1px solid var(--border-color);">
+
+                        <h3 class="mb-2">Change Password</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--spacing-md);">
+                            Leave blank if you don't want to change your password
+                        </p>
+
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password (optional)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Wrap in async IIFE to allow await
+        (async () => {
+            const user = limpay.requireAuth();
+            if (!user) return; // Redirect handled in requireAuth
+
+            // Initial population from localStorage (fast)
+            populateForm(user);
+
+            // Fetch fresh data from server (reliable)
+            try {
+                const response = await api.getMe();
+                if (response.success) {
+                    const freshUser = response.user;
+                    // Update localStorage
+                    localStorage.setItem('limpay_user', JSON.stringify(freshUser));
+                    // Update UI
+                    populateForm(freshUser);
+                }
+            } catch (err) {
+                console.error('Failed to fetch fresh profile data:', err);
+            }
+        })();
+
+        function populateForm(user) {
+            // Header and Sidebar
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileId').textContent = 'ID: ' + user.id;
+
+            // Form
+            document.getElementById('studentId').value = user.id;
+            document.getElementById('fullName').value = user.name;
+            document.getElementById('email').value = user.email;
+            document.getElementById('faculty').value = user.faculty || ''; // Handle missing faculty
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = 'alert alert-' + type;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        async function handleProfileUpdate(event) {
+            event.preventDefault();
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validate password if provided
+            if (newPassword || confirmPassword) {
+                if (newPassword !== confirmPassword) {
+                    showAlert('Passwords do not match!', 'error');
+                    return;
+                }
+                if (newPassword.length < 6) {
+                    showAlert('Password must be at least 6 characters long!', 'error');
+                    return;
+                }
+            }
+
+            const profileData = {
+                name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                faculty: document.getElementById('faculty').value
+            };
+
+            if (newPassword) {
+                profileData.password = newPassword;
+            }
+
+            // Use the new updateProfile method
+            const result = await limpay.updateProfile(profileData);
+
+            if (result.success) {
+                // Update current user in localStorage
+                const currentUser = limpay.getCurrentUser();
+                const updatedUser = { ...currentUser, ...profileData };
+                localStorage.setItem('limpay_user', JSON.stringify(updatedUser));
+
+                // Update display
+                populateForm(updatedUser);
+
+                showAlert('Profile updated successfully!', 'success');
+
+                // Clear password fields
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            } else {
+                showAlert(result.message || 'Failed to update profile', 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>

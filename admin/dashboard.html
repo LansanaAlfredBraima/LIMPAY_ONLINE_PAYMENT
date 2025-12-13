@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LIMPAY</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .navbar {
+            background-color: var(--primary-color);
+            color: var(--surface-color);
+            padding: 15px 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--surface-color);
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--surface-color);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .sidebar {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 5px;
+            text-decoration: none;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .stat-card {
+            background-color: var(--surface-color);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        th,
+        td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--background-color);
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: var(--surface-color);
+            margin: 5% auto;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close {
+            color: var(--text-secondary);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="password"]:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .card {
+            background-color: var(--surface-color);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <span style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-color);">LIMPAY</span>
+                <span>Admin Dashboard</span>
+            </div>
+            <div class="navbar-actions">
+                <span id="adminName" style="font-weight: 500;">Admin User</span>
+                <button onclick="handleLogout()" class="btn btn-secondary"
+                    style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-3 mb-3">
+        <div class="dashboard-grid">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-menu">
+                    <a href="#" onclick="switchAdminTab('overview'); return false;" id="nav-overview"
+                        class="active">Overview</a>
+                    <a href="#" onclick="switchAdminTab('transactions'); return false;"
+                        id="nav-transactions">Transactions</a>
+                    <a href="#" onclick="switchAdminTab('students'); return false;" id="nav-students">Students</a>
+                    <a href="#" onclick="switchAdminTab('settings'); return false;" id="nav-settings">Settings</a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="content">
+                <!-- Overview Tab -->
+                <div id="view-overview">
+                    <h2 class="mb-2">System Overview</h2>
+
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                        <div class="stat-card">
+                            <p class="mb-1">Total Revenue</p>
+                            <div class="stat-value" id="totalRevenue">Le0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <p class="mb-1">Total Transactions</p>
+                            <div class="stat-value" id="totalTxns">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <p class="mb-1">Active Students</p>
+                            <div class="stat-value" id="activeStudents">0</div>
+                        </div>
+                    </div>
+
+                    <h3 class="mb-2">Recent Transactions</h3>
+                    <div style="overflow-x: auto;">
+                        <table id="recentTxnTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTxnBody">
+                                <!-- Rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Transactions Tab -->
+                <div id="view-transactions" style="display: none;">
+                    <h2 class="mb-2">All Transactions</h2>
+                    <div style="overflow-x: auto;">
+                        <table id="allTxnTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTxnBody">
+                                <!-- Rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Students Tab -->
+                <div id="view-students" style="display: none;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h2 class="mb-0">Registered Students</h2>
+                        <button onclick="openStudentModal()" class="btn btn-primary">Add
+                            Student</button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Faculty</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsBody">
+                                <!-- Rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="view-settings" style="display: none;">
+                    <h2 class="mb-2">Settings</h2>
+                    <div class="card">
+                        <p>System settings configuration will appear here.</p>
+                        <p style="color: var(--text-secondary);">Current Version: 1.0.0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Student Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStudentModal()">&times;</span>
+            <h2 id="modalTitle" class="mb-2">Add Student</h2>
+            <form id="studentForm" onsubmit="handleStudentSubmit(event)">
+                <input type="hidden" id="editMode" value="false">
+                <div class="form-group">
+                    <label for="stuId">Student ID</label>
+                    <input type="text" id="stuId" required>
+                </div>
+                <div class="form-group">
+                    <label for="stuName">Full Name</label>
+                    <input type="text" id="stuName" required>
+                </div>
+                <div class="form-group">
+                    <label for="stuEmail">Email</label>
+                    <input type="email" id="stuEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="stuFaculty">Faculty</label>
+                    <select id="stuFaculty" required>
+                        <option value="">Select Faculty</option>
+                        <option value="Science">Science</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business">Business</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="stuPassword">Password</label>
+                    <input type="password" id="stuPassword" placeholder="Default: password123">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Student</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        (async () => {
+            const user = limpay.requireAuth('../login.html');
+            if (user.role !== 'admin') {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            document.getElementById('adminName').textContent = user.name;
+
+            // Initial render
+            await renderStudents();
+            await renderTransactions('recentTxnTable', 'recentTxnBody', 5);
+            await renderTransactions('allTxnTable', 'allTxnBody');
+            await updateOverviewStats();
+        })();
+
+        function handleLogout() {
+            limpay.logout('../login.html');
+        }
+
+        async function renderStudents() {
+            const students = await limpay.getAllStudents();
+            const tbody = document.getElementById('studentsBody');
+            tbody.innerHTML = '';
+
+            if (students.length === 0) {
+                const row = tbody.insertRow();
+                row.innerHTML = '<td colspan="5" style="text-align:center;">No students found.</td>';
+                return;
+            }
+
+            students.forEach(student => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = student.id;
+                row.insertCell().textContent = student.name;
+                row.insertCell().textContent = student.email;
+                row.insertCell().textContent = student.faculty || 'N/A';
+                const actionsCell = row.insertCell();
+                actionsCell.innerHTML = `
+                    <button class="btn btn-sm btn-primary" onclick="editStudent('${student.id}')" style="padding: 2px 8px; font-size: 0.8rem; margin-right: 5px;">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteStudent('${student.id}')" style="padding: 2px 8px; font-size: 0.8rem; background-color: #dc3545; color: white;">Delete</button>
+                `;
+            });
+        }
+
+        async function renderTransactions(tableId, bodyId, limit = null) {
+            let txns = await limpay.getAllTransactions();
+            const tbody = document.getElementById(bodyId);
+            tbody.innerHTML = '';
+
+            if (txns.length === 0) {
+                const row = tbody.insertRow();
+                row.innerHTML = '<td colspan="6" style="text-align:center;">No transactions found.</td>';
+                return;
+            }
+
+            // Sort by date desc
+            txns.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            if (limit) {
+                txns = txns.slice(0, limit);
+            }
+
+            txns.forEach(txn => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = new Date(txn.created_at).toLocaleDateString();
+                row.insertCell().textContent = txn.student_id;
+                row.insertCell().textContent = txn.studentName || 'N/A';
+                row.insertCell().textContent = txn.description || 'Payment';
+                row.insertCell().textContent = 'Le' + txn.amount.toFixed(2);
+                row.insertCell().textContent = txn.status || 'Success';
+            });
+        }
+
+        async function updateOverviewStats() {
+            const transactions = await limpay.getAllTransactions();
+            const students = await limpay.getAllStudents();
+
+            const totalRev = transactions.reduce((sum, t) => sum + t.amount, 0);
+
+            document.getElementById('totalRevenue').textContent = 'Le' + totalRev.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('totalTxns').textContent = transactions.length;
+            document.getElementById('activeStudents').textContent = students.length;
+        }
+
+        function openStudentModal(student = null) {
+            const modal = document.getElementById('studentModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const form = document.getElementById('studentForm');
+            document.getElementById('editMode').value = 'false';
+            form.reset();
+
+            if (student) {
+                modalTitle.textContent = 'Edit Student';
+                document.getElementById('editMode').value = 'true';
+                document.getElementById('stuId').value = student.id;
+                document.getElementById('stuId').readOnly = true;
+                document.getElementById('stuName').value = student.name;
+                document.getElementById('stuEmail').value = student.email;
+                document.getElementById('stuFaculty').value = student.faculty;
+                document.getElementById('stuPassword').placeholder = 'Leave blank to keep current password';
+            } else {
+                modalTitle.textContent = 'Add Student';
+                document.getElementById('stuId').readOnly = false;
+                document.getElementById('stuPassword').placeholder = 'Default: password123';
+            }
+            modal.style.display = 'block';
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModal').style.display = 'none';
+        }
+
+        async function handleStudentSubmit(event) {
+            event.preventDefault();
+            const isEditMode = document.getElementById('editMode').value === 'true';
+
+            const studentData = {
+                id: document.getElementById('stuId').value,
+                name: document.getElementById('stuName').value,
+                email: document.getElementById('stuEmail').value,
+                faculty: document.getElementById('stuFaculty').value,
+                password: document.getElementById('stuPassword').value
+            };
+
+            // Only send password if it's not empty (handled in backend, but good to be clean)
+            if (!studentData.password) delete studentData.password;
+
+            let result;
+            if (isEditMode) {
+                result = await limpay.updateStudent(studentData.id, studentData);
+            } else {
+                // For new students, default password if empty
+                if (!studentData.password) studentData.password = 'password123';
+                result = await limpay.addStudent(studentData);
+            }
+
+            if (result.success) {
+                await renderStudents();
+                await updateOverviewStats();
+                closeStudentModal();
+            } else {
+                alert(result.message);
+            }
+        }
+
+        async function editStudent(id) {
+            const students = await limpay.getAllStudents();
+            const student = students.find(s => s.id === id);
+            if (student) {
+                openStudentModal(student);
+            }
+        }
+
+        async function deleteStudent(id) {
+            if (confirm(`Are you sure you want to delete student ${id}?`)) {
+                const result = await limpay.deleteStudent(id);
+                if (result.success) {
+                    await renderStudents();
+                    await updateOverviewStats();
+                } else {
+                    alert(result.message);
+                }
+            }
+        }
+
+        // Tab switching logic
+        function switchAdminTab(tabId) {
+            // Hide all
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('[id^="nav-"]').forEach(el => el.classList.remove('active'));
+            // Show selected
+            document.getElementById('view-' + tabId).style.display = 'block';
+            document.getElementById('nav-' + tabId).classList.add('active');
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('studentModal');
+            if (event.target == modal) {
+                closeStudentModal();
+            }
+        }
+    </script>
+</body>
+
+</html>
