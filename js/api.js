@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://localhost:3000/api'; // HTTPS for secure communication 
+const API_BASE_URL = '/api'; // Relative path for both local and production 
 // Note: If mixed content issues arise (serving HTML from file:// and API from http://), we might need to adjust. 
 // Since we are likely opening files directly or via a simple server, let's assume localhost:3000 is accessible.
 
