@@ -112,3 +112,5 @@ const api = {
         return this.request('/admin/students/' + studentId, 'DELETE');
     }
 };
+
+window.api = api;
