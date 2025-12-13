@@ -35,12 +35,19 @@ a {
     padding: 0 var(--spacing-md);
 }
 
+.container-narrow {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 /* Header */
 .main-header {
     background-color: var(--primary-color);
     color: var(--surface-color);
     padding: var(--spacing-md) 0;
     box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 100;
 }
 
 .header-content {
@@ -53,6 +60,22 @@ a {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--secondary-color);
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--surface-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 /* Cards */
@@ -105,6 +128,11 @@ a {
 .btn-block {
     display: block;
     width: 100%;
+}
+
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 0.9rem;
 }
 
 /* Forms */
@@ -163,10 +191,100 @@ a {
     margin-bottom: var(--spacing-lg);
 }
 
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+/* Dashboard Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: var(--spacing-lg);
+    position: relative;
+}
+
+.sidebar {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    height: fit-content;
+}
+
+.sidebar-menu a {
+    display: block;
+    padding: 10px;
+    color: var(--text-primary);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 5px;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
 /* Grid for Fee Selection */
 .fee-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
     margin-top: var(--spacing-xl);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .sidebar {
+        display: none; /* Hide default sidebar on mobile */
+        width: 100%;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .sidebar.show {
+        display: block;
+    }
+
+    .header-content {
+        position: relative;
+    }
+
+    .stat-card {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+}
+
+@media (max-width: 480px) {
+    .fee-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-actions span {
+        display: none; /* Hide username on very small screens */
+    }
 }

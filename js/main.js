@@ -168,6 +168,14 @@ class LimpaySystem {
             return { success: false, message: error.message };
         }
     }
+
+    // UI Helpers
+    toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.toggle('show');
+        }
+    }
 }
 
 const limpay = new LimpaySystem();

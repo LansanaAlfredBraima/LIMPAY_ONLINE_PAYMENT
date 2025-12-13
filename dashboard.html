@@ -61,8 +61,11 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">LIMPAY University</div>
-            <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="d-flex align-items-center" style="gap: 15px;">
+                <button class="mobile-menu-btn" onclick="limpay.toggleSidebar()">☰</button>
+                <div class="logo">LIMPAY University</div>
+            </div>
+            <div class="header-actions">
                 <span id="userName" style="color: var(--surface-color);">Student</span>
                 <button onclick="limpay.logout()" class="btn btn-secondary"
                     style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
@@ -73,7 +76,7 @@
     <main class="container mt-3 mb-3">
         <div class="dashboard-grid">
             <!-- Sidebar -->
-            <aside class="sidebar">
+            <aside class="sidebar" id="sidebar">
                 <div class="text-center mb-2">
                     <div
                         style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
