@@ -42,8 +42,8 @@ const api = {
                 if (response.status === 401 || response.status === 403) {
                     // Token expired or invalid
                     this.clearToken();
-                    if (!window.location.href.includes('login.html') && !window.location.href.includes('register.html')) {
-                        window.location.href = 'login.html';
+                    if (!window.location.href.includes('index.html') && !window.location.href.includes('register.html')) {
+                        window.location.href = 'index.html';
                     }
                 }
                 throw new Error(data.message || 'API Request Failed');

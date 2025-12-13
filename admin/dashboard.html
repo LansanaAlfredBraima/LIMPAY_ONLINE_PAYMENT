@@ -363,9 +363,9 @@
     <script src="../js/main.js"></script>
     <script>
         (async () => {
-            const user = limpay.requireAuth('../login.html');
+            const user = limpay.requireAuth('../index.html');
             if (user.role !== 'admin') {
-                window.location.href = '../login.html';
+                window.location.href = '../index.html';
                 return;
             }
 
@@ -379,7 +379,7 @@
         })();
 
         function handleLogout() {
-            limpay.logout('../login.html');
+            limpay.logout('../index.html');
         }
 
         async function renderStudents() {

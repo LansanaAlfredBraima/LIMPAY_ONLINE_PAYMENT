@@ -38,7 +38,7 @@ class LimpaySystem {
         }
     }
 
-    logout(redirectUrl = 'login.html') {
+    logout(redirectUrl = 'index.html') {
         api.clearToken();
         window.location.href = redirectUrl;
     }
@@ -47,7 +47,7 @@ class LimpaySystem {
         return JSON.parse(localStorage.getItem('limpay_user'));
     }
 
-    requireAuth(loginUrl = 'login.html') {
+    requireAuth(loginUrl = 'index.html') {
         const user = this.getCurrentUser();
         if (!user) {
             window.location.href = loginUrl;

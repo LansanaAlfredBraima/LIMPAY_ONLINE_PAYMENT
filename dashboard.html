@@ -84,7 +84,7 @@
                 </div>
                 <nav class="sidebar-menu">
                     <a href="dashboard.html" class="active">Dashboard</a>
-                    <a href="index.html">Make Payment</a>
+                    <a href="payment-options.html">Make Payment</a>
                     <a href="history.html">Transaction History</a>
                     <a href="profile.html">My Profile</a>
                     <a href="#">Support</a>
@@ -114,177 +114,180 @@
 
                 <h3 class="mb-2">Outstanding Fees</h3>
                 <div id="feesList">
-<!DOCTYPE html>
-<html lang="en">
+                    <!DOCTYPE html>
+                    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - LIMPAY University</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: var(--spacing-lg);
-        }
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Student Dashboard - LIMPAY University</title>
+                        <link rel="stylesheet" href="css/style.css">
+                        <style>
+                            .dashboard-grid {
+                                display: grid;
+                                grid-template-columns: 250px 1fr;
+                                gap: var(--spacing-lg);
+                            }
 
-        .sidebar {
-            background-color: var(--surface-color);
-            border-radius: var(--border-radius-md);
-            padding: var(--spacing-md);
-            box-shadow: var(--shadow-sm);
-            height: fit-content;
-        }
+                            .sidebar {
+                                background-color: var(--surface-color);
+                                border-radius: var(--border-radius-md);
+                                padding: var(--spacing-md);
+                                box-shadow: var(--shadow-sm);
+                                height: fit-content;
+                            }
 
-        .sidebar-menu a {
-            display: block;
-            padding: 10px;
-            color: var(--text-primary);
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 5px;
-        }
+                            .sidebar-menu a {
+                                display: block;
+                                padding: 10px;
+                                color: var(--text-primary);
+                                border-radius: var(--border-radius-sm);
+                                margin-bottom: 5px;
+                            }
 
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background-color: var(--background-color);
-            color: var(--primary-color);
-            font-weight: 600;
-        }
+                            .sidebar-menu a:hover,
+                            .sidebar-menu a.active {
+                                background-color: var(--background-color);
+                                color: var(--primary-color);
+                                font-weight: 600;
+                            }
 
-        .stat-card {
-            background-color: var(--surface-color);
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-sm);
-            text-align: center;
-        }
+                            .stat-card {
+                                background-color: var(--surface-color);
+                                padding: var(--spacing-md);
+                                border-radius: var(--border-radius-md);
+                                box-shadow: var(--shadow-sm);
+                                text-align: center;
+                            }
 
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
+                            .stat-value {
+                                font-size: 2rem;
+                                font-weight: bold;
+                                color: var(--primary-color);
+                            }
 
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
+                            @media (max-width: 768px) {
+                                .dashboard-grid {
+                                    grid-template-columns: 1fr;
+                                }
+                            }
+                        </style>
+                    </head>
 
-<body>
-    <header class="main-header">
-        <div class="container header-content">
-            <div class="logo">LIMPAY University</div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span id="userName" style="color: var(--surface-color);">Student</span>
-                <button onclick="limpay.logout()" class="btn btn-secondary"
-                    style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
-            </div>
-        </div>
-    </header>
+                    <body>
+                        <header class="main-header">
+                            <div class="container header-content">
+                                <div class="logo">LIMPAY University</div>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <span id="userName" style="color: var(--surface-color);">Student</span>
+                                    <button onclick="limpay.logout()" class="btn btn-secondary"
+                                        style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
+                                </div>
+                            </div>
+                        </header>
 
-    <main class="container mt-3 mb-3">
-        <div class="dashboard-grid">
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="text-center mb-2">
-                    <div
-                        style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
-                        🎓
-                    </div>
-                    <h4 id="profileName" style="margin-bottom: 5px;">Student Name</h4>
-                    <p id="profileId" style="color: var(--text-secondary); font-size: 0.9rem;">ID: 2024000</p>
-                </div>
-                <nav class="sidebar-menu">
-                    <a href="dashboard.html" class="active">Dashboard</a>
-                    <a href="index.html">Make Payment</a>
-                    <a href="history.html">Transaction History</a>
-                    <a href="profile.html">My Profile</a>
-                    <a href="#">Support</a>
-                </nav>
-            </aside>
+                        <main class="container mt-3 mb-3">
+                            <div class="dashboard-grid">
+                                <!-- Sidebar -->
+                                <aside class="sidebar">
+                                    <div class="text-center mb-2">
+                                        <div
+                                            style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
+                                            🎓
+                                        </div>
+                                        <h4 id="profileName" style="margin-bottom: 5px;">Student Name</h4>
+                                        <p id="profileId" style="color: var(--text-secondary); font-size: 0.9rem;">ID:
+                                            2024000</p>
+                                    </div>
+                                    <nav class="sidebar-menu">
+                                        <a href="dashboard.html" class="active">Dashboard</a>
+                                        <a href="index.html">Make Payment</a>
+                                        <a href="history.html">Transaction History</a>
+                                        <a href="profile.html">My Profile</a>
+                                        <a href="#">Support</a>
+                                    </nav>
+                                </aside>
 
-            <!-- Main Content -->
-            <div class="content">
-                <h2 class="mb-2">Dashboard Overview</h2>
+                                <!-- Main Content -->
+                                <div class="content">
+                                    <h2 class="mb-2">Dashboard Overview</h2>
 
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
-                    <div class="stat-card">
-                        <p class="mb-1">Outstanding Balance</p>
-                        <div class="stat-value" style="color: var(--accent-color);">Le0.00</div>
-                    </div>
-                    <div class="stat-card">
-                        <p class="mb-1">Last Payment</p>
-                        <div class="stat-value" style="font-size: 1.5rem;">Le0.00</div>
-                        <span style="font-size: 0.8rem; color: var(--text-secondary);">No payments yet</span>
-                    </div>
-                    <div class="stat-card">
-                        <p class="mb-1">Session Status</p>
-                        <div class="stat-value" style="font-size: 1.5rem; color: #28a745;">Active</div>
-                    </div>
-                </div>
+                                    <div
+                                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                                        <div class="stat-card">
+                                            <p class="mb-1">Outstanding Balance</p>
+                                            <div class="stat-value" style="color: var(--accent-color);">Le0.00</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <p class="mb-1">Last Payment</p>
+                                            <div class="stat-value" style="font-size: 1.5rem;">Le0.00</div>
+                                            <span style="font-size: 0.8rem; color: var(--text-secondary);">No payments
+                                                yet</span>
+                                        </div>
+                                        <div class="stat-card">
+                                            <p class="mb-1">Session Status</p>
+                                            <div class="stat-value" style="font-size: 1.5rem; color: #28a745;">Active
+                                            </div>
+                                        </div>
+                                    </div>
 
-                <h3 class="mb-2">Outstanding Fees</h3>
-                <div id="feesList">
-                    <!-- Fees will be injected here -->
-                </div>
-            </div>
-        </div>
-    </main>
+                                    <h3 class="mb-2">Outstanding Fees</h3>
+                                    <div id="feesList">
+                                        <!-- Fees will be injected here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
 
-    <script src="js/api.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-        // Wrap in async IIFE
-        (async () => {
-            const user = limpay.requireAuth();
+                        <script src="js/api.js"></script>
+                        <script src="js/main.js"></script>
+                        <script>
+                            // Wrap in async IIFE
+                            (async () => {
+                                const user = limpay.requireAuth();
 
-            if (user) {
-                document.getElementById('userName').textContent = user.name;
-                document.getElementById('profileName').textContent = user.name;
-                document.getElementById('profileId').textContent = 'ID: ' + user.id;
+                                if (user) {
+                                    document.getElementById('userName').textContent = user.name;
+                                    document.getElementById('profileName').textContent = user.name;
+                                    document.getElementById('profileId').textContent = 'ID: ' + user.id;
 
-                try {
-                    const fees = await limpay.getOutstandingFees(user.id);
-                    const feesContainer = document.getElementById('feesList');
+                                    try {
+                                        const fees = await limpay.getOutstandingFees(user.id);
+                                        const feesContainer = document.getElementById('feesList');
 
-                    // Calculate total outstanding balance
-                    const totalBalance = fees.reduce((sum, fee) => sum + fee.balance, 0);
-                    document.querySelector('.stat-card .stat-value').textContent = 'Le' + totalBalance.toFixed(2);
+                                        // Calculate total outstanding balance
+                                        const totalBalance = fees.reduce((sum, fee) => sum + fee.balance, 0);
+                                        document.querySelector('.stat-card .stat-value').textContent = 'Le' + totalBalance.toFixed(2);
 
-                    // Get last payment from transactions
-                    const transactions = await limpay.getTransactions(user.id);
-                    if (transactions.length > 0) {
-                        // Sort by date desc and get the most recent
-                        transactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                        const lastTxn = transactions[0];
-                        const lastPaymentValue = document.querySelectorAll('.stat-card .stat-value')[1];
-                        const lastPaymentDate = lastPaymentValue.nextElementSibling;
+                                        // Get last payment from transactions
+                                        const transactions = await limpay.getTransactions(user.id);
+                                        if (transactions.length > 0) {
+                                            // Sort by date desc and get the most recent
+                                            transactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                                            const lastTxn = transactions[0];
+                                            const lastPaymentValue = document.querySelectorAll('.stat-card .stat-value')[1];
+                                            const lastPaymentDate = lastPaymentValue.nextElementSibling;
 
-                        lastPaymentValue.textContent = 'Le' + lastTxn.amount.toFixed(2);
-                        lastPaymentDate.textContent = new Date(lastTxn.created_at).toLocaleDateString();
-                    } else {
-                        const lastPaymentValue = document.querySelectorAll('.stat-card .stat-value')[1];
-                        lastPaymentValue.textContent = 'Le0.00';
-                        lastPaymentValue.nextElementSibling.textContent = 'No payments yet';
-                    }
+                                            lastPaymentValue.textContent = 'Le' + lastTxn.amount.toFixed(2);
+                                            lastPaymentDate.textContent = new Date(lastTxn.created_at).toLocaleDateString();
+                                        } else {
+                                            const lastPaymentValue = document.querySelectorAll('.stat-card .stat-value')[1];
+                                            lastPaymentValue.textContent = 'Le0.00';
+                                            lastPaymentValue.nextElementSibling.textContent = 'No payments yet';
+                                        }
 
-                    if (fees.length === 0) {
-                        feesContainer.innerHTML = '<div class="card"><p>No outstanding fees. Good job!</p></div>';
-                    } else {
-                        feesContainer.innerHTML = ''; // Clear loading state
-                        fees.forEach(fee => {
-                            const feeCard = document.createElement('div');
-                            feeCard.className = 'card mb-2';
-                            feeCard.style.display = 'flex';
-                            feeCard.style.justifyContent = 'space-between';
-                            feeCard.style.alignItems = 'center';
+                                        if (fees.length === 0) {
+                                            feesContainer.innerHTML = '<div class="card"><p>No outstanding fees. Good job!</p></div>';
+                                        } else {
+                                            feesContainer.innerHTML = ''; // Clear loading state
+                                            fees.forEach(fee => {
+                                                const feeCard = document.createElement('div');
+                                                feeCard.className = 'card mb-2';
+                                                feeCard.style.display = 'flex';
+                                                feeCard.style.justifyContent = 'space-between';
+                                                feeCard.style.alignItems = 'center';
 
-                            feeCard.innerHTML = `
+                                                feeCard.innerHTML = `
                                 <div>
                                     <h4 style="margin-bottom: 5px;">${fee.type}</h4>
                                     <p style="color: var(--text-secondary);">${fee.session}</p>
@@ -299,16 +302,16 @@
                                     <a href="checkout.html?type=${encodeURIComponent(fee.type)}&amount=${fee.balance}&feeId=${fee.id}" class="btn btn-primary btn-sm">Pay Now</a>
                                 </div>
                             `;
-                            feesContainer.appendChild(feeCard);
-                        });
-                    }
-                } catch (err) {
-                    console.error('Error loading dashboard data:', err);
-                    document.getElementById('feesList').innerHTML = '<p class="text-danger">Error loading data. Please try again.</p>';
-                }
-            }
-        })();
-    </script>
-</body>
+                                                feesContainer.appendChild(feeCard);
+                                            });
+                                        }
+                                    } catch (err) {
+                                        console.error('Error loading dashboard data:', err);
+                                        document.getElementById('feesList').innerHTML = '<p class="text-danger">Error loading data. Please try again.</p>';
+                                    }
+                                }
+                            })();
+                        </script>
+                    </body>
 
-</html>
+                    </html>

@@ -4,48 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Make Payment - LIMPAY</title>
+    <title>Login - LIMPAY University</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: var(--spacing-lg);
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
         }
 
-        .sidebar {
-            background-color: var(--surface-color);
-            border-radius: var(--border-radius-md);
-            padding: var(--spacing-md);
-            box-shadow: var(--shadow-sm);
-            height: fit-content;
+        .nav-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        .sidebar-menu a {
-            display: block;
+        .nav-tab {
+            flex: 1;
+            text-align: center;
             padding: 10px;
-            color: var(--text-primary);
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background-color: var(--background-color);
-            color: var(--primary-color);
+            cursor: pointer;
             font-weight: 600;
+            color: var(--text-secondary);
         }
 
-        .fee-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+        .nav-tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: -2px;
         }
     </style>
 </head>
@@ -53,93 +38,99 @@
 <body>
     <header class="main-header">
         <div class="container header-content">
-            <div class="logo">LIMPAY University</div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span id="userName" style="color: var(--surface-color);">Student</span>
-                <button onclick="limpay.logout()" class="btn btn-secondary"
-                    style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
-            </div>
+            <div class="logo">LIMPAY</div>
+            <nav>
+                <a href="index.html" style="color: var(--surface-color);">Home</a>
+            </nav>
         </div>
     </header>
 
-    <main class="container mt-3 mb-3">
-        <div class="dashboard-grid">
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="text-center mb-2">
-                    <div
-                        style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
-                        🎓
-                    </div>
-                    <h4 id="profileName" style="margin-bottom: 5px;">Student Name</h4>
-                    <p id="profileId" style="color: var(--text-secondary); font-size: 0.9rem;">ID: 2024000</p>
-                </div>
-                <nav class="sidebar-menu">
-                    <a href="dashboard.html">Dashboard</a>
-                    <a href="index.html" class="active">Make Payment</a>
-                    <a href="history.html">Transaction History</a>
-                    <a href="profile.html">My Profile</a>
-                    <a href="#">Support</a>
-                </nav>
-            </aside>
-
-            <!-- Main Content -->
-            <div class="content">
-                <div class="text-center mb-3">
-                    <h1>Select Payment Type</h1>
-                    <p style="color: var(--text-secondary);">Please choose the type of fee you wish to pay.</p>
-                </div>
-
-                <div class="fee-grid">
-                    <!-- Tuition Fee -->
-                    <div class="card text-center">
-                        <h3>Tuition Fees</h3>
-                        <p class="mb-2">Pay your semester or annual tuition fees securely.</p>
-                        <a href="checkout.html?type=tuition" class="btn btn-primary btn-block">Pay Tuition</a>
-                    </div>
-
-                    <!-- Accommodation Fee -->
-                    <div class="card text-center">
-                        <h3>Accommodation</h3>
-                        <p class="mb-2">Hostel and accommodation charges for on-campus stay.</p>
-                        <a href="checkout.html?type=accommodation" class="btn btn-primary btn-block">Pay
-                            Accommodation</a>
-                    </div>
-
-                    <!-- Departmental Fee -->
-                    <div class="card text-center">
-                        <h3>Departmental Fees</h3>
-                        <p class="mb-2">Specific charges related to your department or faculty.</p>
-                        <a href="checkout.html?type=departmental" class="btn btn-primary btn-block">Pay Dept. Fees</a>
-                    </div>
-
-                    <!-- Transcript Fee -->
-                    <div class="card text-center">
-                        <h3>Transcript & Records</h3>
-                        <p class="mb-2">Request and pay for official academic transcripts.</p>
-                        <a href="checkout.html?type=transcript" class="btn btn-primary btn-block">Order Transcript</a>
-                    </div>
-
-                    <!-- Other Charges -->
-                    <div class="card text-center">
-                        <h3>Other Charges</h3>
-                        <p class="mb-2">Library fines, ID card replacement, and miscellaneous.</p>
-                        <a href="checkout.html?type=other" class="btn btn-secondary btn-block">Pay Other Fees</a>
-                    </div>
-                </div>
+    <main class="container">
+        <div class="auth-container card">
+            <div class="text-center mb-2">
+                <h2>Welcome Back</h2>
+                <p style="color: var(--text-secondary);">Sign in to your portal</p>
             </div>
+
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="switchTab('student')">Student Login</div>
+                <div class="nav-tab" onclick="switchTab('admin')">Admin Login</div>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="userId" class="form-label" id="idLabel">Student ID / Email</label>
+                    <input type="text" id="userId" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+
+                <div id="errorMessage" style="color: var(--accent-color); margin-bottom: 10px; display: none;"></div>
+
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+
+                <div class="text-center mt-2">
+                    <p>New Student? <a href="register.html"
+                            style="color: var(--primary-color); font-weight: 600;">Register Here</a></p>
+                </div>
+            </form>
         </div>
     </main>
 
     <script src="js/api.js"></script>
     <script src="js/main.js"></script>
     <script>
-        const user = limpay.requireAuth();
+        let currentRole = 'student';
 
-        if (user) {
-            document.getElementById('userName').textContent = user.name;
-            document.getElementById('profileName').textContent = user.name;
-            document.getElementById('profileId').textContent = 'ID: ' + user.id;
+        function switchTab(role) {
+            currentRole = role;
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const label = document.getElementById('idLabel');
+            if (role === 'admin') {
+                label.textContent = 'Admin Username / Email';
+                document.querySelector('.text-center.mt-2').style.display = 'none';
+            } else {
+                label.textContent = 'Student ID / Email';
+                document.querySelector('.text-center.mt-2').style.display = 'block';
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const id = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+            const btn = e.target.querySelector('button');
+
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+            errorMsg.style.display = 'none';
+
+            try {
+                const result = await limpay.login(id, password);
+
+                if (result.success) {
+                    if (result.user.role === 'admin') {
+                        window.location.href = 'admin/dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    errorMsg.textContent = result.message || 'Invalid credentials';
+                    errorMsg.style.display = 'block';
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Login failed. Please try again.';
+                errorMsg.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
         }
     </script>
 </body>

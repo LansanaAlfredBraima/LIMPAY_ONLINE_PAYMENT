@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Payment - LIMPAY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .sidebar {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .fee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">LIMPAY University</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span id="userName" style="color: var(--surface-color);">Student</span>
+                <button onclick="limpay.logout()" class="btn btn-secondary"
+                    style="padding: 5px 15px; font-size: 0.9rem;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-3 mb-3">
+        <div class="dashboard-grid">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="text-center mb-2">
+                    <div
+                        style="width: 80px; height: 80px; background-color: var(--border-color); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-secondary);">
+                        🎓
+                    </div>
+                    <h4 id="profileName" style="margin-bottom: 5px;">Student Name</h4>
+                    <p id="profileId" style="color: var(--text-secondary); font-size: 0.9rem;">ID: 2024000</p>
+                </div>
+                <nav class="sidebar-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="payment-options.html" class="active">Make Payment</a>
+                    <a href="history.html">Transaction History</a>
+                    <a href="profile.html">My Profile</a>
+                    <a href="#">Support</a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="content">
+                <div class="text-center mb-3">
+                    <h1>Select Payment Type</h1>
+                    <p style="color: var(--text-secondary);">Please choose the type of fee you wish to pay.</p>
+                </div>
+
+                <div class="fee-grid">
+                    <!-- Tuition Fee -->
+                    <div class="card text-center">
+                        <h3>Tuition Fees</h3>
+                        <p class="mb-2">Pay your semester or annual tuition fees securely.</p>
+                        <a href="checkout.html?type=tuition" class="btn btn-primary btn-block">Pay Tuition</a>
+                    </div>
+
+                    <!-- Accommodation Fee -->
+                    <div class="card text-center">
+                        <h3>Accommodation</h3>
+                        <p class="mb-2">Hostel and accommodation charges for on-campus stay.</p>
+                        <a href="checkout.html?type=accommodation" class="btn btn-primary btn-block">Pay
+                            Accommodation</a>
+                    </div>
+
+                    <!-- Departmental Fee -->
+                    <div class="card text-center">
+                        <h3>Departmental Fees</h3>
+                        <p class="mb-2">Specific charges related to your department or faculty.</p>
+                        <a href="checkout.html?type=departmental" class="btn btn-primary btn-block">Pay Dept. Fees</a>
+                    </div>
+
+                    <!-- Transcript Fee -->
+                    <div class="card text-center">
+                        <h3>Transcript & Records</h3>
+                        <p class="mb-2">Request and pay for official academic transcripts.</p>
+                        <a href="checkout.html?type=transcript" class="btn btn-primary btn-block">Order Transcript</a>
+                    </div>
+
+                    <!-- Other Charges -->
+                    <div class="card text-center">
+                        <h3>Other Charges</h3>
+                        <p class="mb-2">Library fines, ID card replacement, and miscellaneous.</p>
+                        <a href="checkout.html?type=other" class="btn btn-secondary btn-block">Pay Other Fees</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const user = limpay.requireAuth();
+
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileId').textContent = 'ID: ' + user.id;
+        }
+    </script>
+</body>
+
+</html>
