@@ -44,12 +44,13 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Rate Limiting
+// Rate Limiting (apply only to API routes so static admin pages aren't blocked)
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
 });
-app.use(limiter);
+// Apply rate limiter to API routes only to avoid 429 on static files like /admin/dashboard.html
+app.use('/api', limiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
