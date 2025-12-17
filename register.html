@@ -110,7 +110,7 @@
                     btn.textContent = 'Register';
                 }
             } catch (err) {
-                errorMsg.textContent = 'Registration failed. Please try again.';
+                errorMsg.textContent = err.message || 'Registration failed. Please try again.';
                 errorMsg.style.display = 'block';
                 btn.disabled = false;
                 btn.textContent = 'Register';
