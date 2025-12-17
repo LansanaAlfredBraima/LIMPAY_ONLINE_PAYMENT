@@ -68,7 +68,7 @@
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
 
                 <div class="text-center mt-2">
-                    <p>Already have an account? <a href="login.html"
+                    <p>Already have an account? <a href="index.html"
                             style="color: var(--primary-color); font-weight: 600;">Login Here</a></p>
                 </div>
             </form>
@@ -102,7 +102,7 @@
 
                 if (result.success) {
                     alert('Registration successful! Please login.');
-                    window.location.href = 'login.html';
+                    window.location.href = 'index.html';
                 } else {
                     errorMsg.textContent = result.message || 'Registration failed';
                     errorMsg.style.display = 'block';
