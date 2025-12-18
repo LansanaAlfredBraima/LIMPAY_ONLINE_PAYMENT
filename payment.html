@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment - LIMPAY University</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <style>
         .payment-container {
@@ -85,7 +86,7 @@
     <script src="js/main.js"></script>
     <script>
         // Initialize Stripe with your Publishable Key
-        const stripe = Stripe('pk_test_51SY05842tqRnUBwzwnBCS1xlHOXrCgnDQ3zTbf28rH8VMzbHM2Otyz6j1PjswljEDYKc17Pl70ehBqeh3ljvAO7000L7jervig');
+        const stripe = Stripe('pk_test_51SXx5JEg9vKoK0oX4h36JPadcktFhsDcn3hyO5iQXT0xMrH39lCG5R6yanwmdmu8ebgdsq8kRT2cFBqqt3kFl0uz00RPoYudLE');
 
         const user = limpay.requireAuth();
         document.getElementById('userName').textContent = user.name;
