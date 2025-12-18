@@ -188,6 +188,201 @@
             border-radius: var(--border-radius-md);
             box-shadow: var(--shadow-sm);
         }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--surface-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+
+            /* Navbar adjustments */
+            .navbar {
+                padding: 10px 0;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .navbar-brand span:last-child {
+                display: none;
+                /* Hide "Admin Dashboard" text on mobile */
+            }
+
+            .navbar-actions {
+                gap: 8px;
+            }
+
+            .navbar-actions span {
+                display: none;
+                /* Hide admin name on mobile */
+            }
+
+            .navbar-actions .btn {
+                padding: 4px 10px;
+                font-size: 0.85rem;
+            }
+
+            /* Dashboard grid - single column */
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            /* Sidebar as mobile menu */
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 50px;
+                left: 0;
+                right: 0;
+                z-index: 99;
+                max-height: calc(100vh - 50px);
+                overflow-y: auto;
+                margin: 0;
+            }
+
+            .sidebar.show {
+                display: block;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            /* Stat cards - responsive grid */
+            .stat-card {
+                padding: var(--spacing-sm);
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            /* Tables - make scrollable */
+            table {
+                font-size: 0.85rem;
+            }
+
+            th,
+            td {
+                padding: 8px 6px;
+                font-size: 0.85rem;
+            }
+
+            /* Modal adjustments */
+            .modal {
+                padding-top: 20px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: var(--spacing-md);
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="email"],
+            .form-group input[type="password"],
+            .form-group select {
+                width: 100%;
+                font-size: 16px;
+                /* Prevents iOS zoom */
+            }
+
+            /* Button adjustments */
+            .btn-sm {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+            }
+
+            /* Header actions in tables */
+            div[style*="justify-content: space-between"] {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 10px;
+            }
+
+            div[style*="justify-content: space-between"] h2 {
+                margin-bottom: 0 !important;
+            }
+
+            div[style*="justify-content: space-between"] .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Extra small screens */
+            .navbar-brand {
+                font-size: 0.9rem;
+            }
+
+            .stat-card {
+                padding: 10px;
+            }
+
+            .stat-value {
+                font-size: 1.3rem;
+            }
+
+            /* Stat grid - single column on very small screens */
+            div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th,
+            td {
+                padding: 6px 4px;
+            }
+
+            /* Hide less important columns on mobile */
+            table th:nth-child(3),
+            table td:nth-child(3) {
+                display: none;
+                /* Hide name column on very small screens */
+            }
+
+            .modal-content {
+                width: 98%;
+                padding: 12px;
+            }
+
+            .close {
+                font-size: 24px;
+                right: 10px;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn {
+                min-height: 44px;
+            }
+
+            .sidebar-menu a {
+                padding: 12px;
+                margin-bottom: 8px;
+            }
+
+            .form-group input,
+            .form-group select {
+                min-height: 44px;
+            }
+        }
     </style>
 </head>
 
@@ -195,6 +390,7 @@
     <header class="navbar">
         <div class="container">
             <div class="navbar-brand">
+                <button class="mobile-menu-btn" onclick="toggleAdminSidebar()">☰</button>
                 <span style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-color);">LIMPAY</span>
                 <span>Admin Dashboard</span>
             </div>
@@ -537,6 +733,17 @@
             // Show selected
             document.getElementById('view-' + tabId).style.display = 'block';
             document.getElementById('nav-' + tabId).classList.add('active');
+
+            // Close sidebar on mobile after selection
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').classList.remove('show');
+            }
+        }
+
+        // Toggle mobile sidebar
+        function toggleAdminSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('show');
         }
 
         // Close modal if clicked outside
