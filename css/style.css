@@ -244,8 +244,32 @@ a {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+    /* Container adjustments */
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    /* Header improvements */
+    .main-header {
+        padding: var(--spacing-sm) 0;
+    }
+
+    .logo {
+        font-size: 1.25rem;
+    }
+
+    .header-content {
+        position: relative;
+    }
+
+    .header-actions {
+        gap: 10px;
+    }
+
+    /* Dashboard layout */
     .dashboard-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
 
     .mobile-menu-btn {
@@ -253,38 +277,202 @@ a {
     }
 
     .sidebar {
-        display: none; /* Hide default sidebar on mobile */
+        display: none;
         width: 100%;
         margin-bottom: var(--spacing-md);
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
     }
     
     .sidebar.show {
         display: block;
     }
 
-    .header-content {
-        position: relative;
+    /* Cards */
+    .card {
+        padding: var(--spacing-md);
     }
 
+    /* Fee grid */
+    .fee-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    /* Stat cards */
     .stat-card {
         margin-bottom: var(--spacing-md);
     }
 
-    .container {
-        padding: 0 var(--spacing-md);
-    }
-    
+    /* Typography scaling */
     h1 { font-size: 1.75rem; }
     h2 { font-size: 1.5rem; }
     h3 { font-size: 1.25rem; }
+
+    /* Buttons */
+    .btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    /* Forms */
+    .form-control {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    /* Tables */
+    table {
+        font-size: 0.9rem;
+    }
+
+    table th,
+    table td {
+        padding: 8px 6px;
+    }
+
+    /* Auth containers */
+    .auth-container {
+        margin: 20px auto !important;
+        padding: var(--spacing-md) !important;
+    }
+
+    /* Payment containers */
+    .payment-container {
+        margin: 20px auto !important;
+    }
+
+    .payment-form {
+        padding: var(--spacing-md) !important;
+    }
+
+    /* Receipt adjustments */
+    .receipt-container {
+        padding: var(--spacing-md) !important;
+        margin: 10px !important;
+    }
+
+    .paid-stamp {
+        font-size: 2rem !important;
+        top: 80px !important;
+        right: 20px !important;
+        padding: 5px 10px !important;
+    }
+
+    .receipt-info {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .receipt-info .info-group {
+        text-align: left !important;
+    }
 }
 
 @media (max-width: 480px) {
+    /* Extra small screens */
+    .container {
+        padding: 0 10px;
+    }
+
+    .logo {
+        font-size: 1.1rem;
+    }
+
     .fee-grid {
         grid-template-columns: 1fr;
     }
     
     .header-actions span {
         display: none; /* Hide username on very small screens */
+    }
+
+    /* Typography for small screens */
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.1rem; }
+
+    /* Smaller buttons */
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    /* Tables - make scrollable */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 500px;
+        font-size: 0.85rem;
+    }
+
+    /* Card spacing */
+    .card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    /* Receipt table */
+    .receipt-table {
+        font-size: 0.85rem;
+    }
+
+    .receipt-table th,
+    .receipt-table td {
+        padding: 10px 5px;
+    }
+
+    .total-amount {
+        font-size: 1.5rem !important;
+    }
+
+    /* Navigation tabs */
+    .nav-tabs {
+        font-size: 0.9rem;
+    }
+
+    .nav-tab {
+        padding: 8px !important;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-header {
+        padding: 8px 0;
+    }
+
+    .sidebar {
+        max-height: calc(100vh - 50px);
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase tap targets for touch devices */
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .sidebar-menu a {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        min-height: 44px;
+    }
+
+    /* Prevent hover effects on touch */
+    .card:hover {
+        transform: none;
     }
 }
