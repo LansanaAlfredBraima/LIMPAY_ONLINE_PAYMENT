@@ -8,7 +8,8 @@ const { validateRequest, authenticateToken } = require('../middleware');
 
 // Register User
 router.post('/register', [
-    body('id').notEmpty().withMessage('Student ID is required'),
+    body('id').notEmpty().withMessage('Student ID is required')
+        .matches(/^[0-9]{7}$/).withMessage('Student ID must be exactly 7 digits'),
     body('name').notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),

@@ -44,6 +44,11 @@ router.post('/students', isAdmin, async (req, res, next) => {
         return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
+    // Validate student ID format (exactly 7 digits)
+    if (!/^[0-9]{7}$/.test(id)) {
+        return res.status(400).json({ success: false, message: 'Student ID must be exactly 7 digits' });
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 

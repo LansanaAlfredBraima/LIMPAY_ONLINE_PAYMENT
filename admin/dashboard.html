@@ -527,7 +527,11 @@
                 <input type="hidden" id="editMode" value="false">
                 <div class="form-group">
                     <label for="stuId">Student ID</label>
-                    <input type="text" id="stuId" required>
+                    <input type="text" id="stuId" pattern="[0-9]{7}" maxlength="7" placeholder="e.g. 2020001"
+                        title="Student ID must be exactly 7 digits" required>
+                    <small
+                        style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-top: 5px;">Must
+                        be exactly 7 digits</small>
                 </div>
                 <div class="form-group">
                     <label for="stuName">Full Name</label>

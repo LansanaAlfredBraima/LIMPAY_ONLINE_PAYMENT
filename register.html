@@ -40,7 +40,9 @@
 
                 <div class="form-group">
                     <label for="studentId" class="form-label">Student ID</label>
-                    <input type="text" id="studentId" class="form-control" placeholder="e.g. 2025001" required>
+                    <input type="text" id="studentId" class="form-control" placeholder="e.g. 2020001" pattern="[0-9]{7}"
+                        maxlength="7" title="Student ID must be exactly 7 digits" required>
+                    <small style="color: var(--text-secondary); font-size: 0.85rem;">Must be exactly 7 digits</small>
                 </div>
 
                 <div class="form-group">
